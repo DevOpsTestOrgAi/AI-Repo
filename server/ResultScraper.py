@@ -45,9 +45,9 @@ def res(userInput):
             print('jumia.ma'+record)
         print(len(cards))  # check how many records are found
 
-
+        return cards
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
 
-res(userInput)
+# res(userInput)
