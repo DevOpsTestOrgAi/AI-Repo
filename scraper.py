@@ -1,12 +1,10 @@
+from flask import Flask, request
 import requests
 from bs4 import BeautifulSoup as Bs
 
-def get_url():
-    url = "https://www.jumia.ma/smart-watch-t500-montre-intelligente-smart-watsh-full-appel-etanche-frequence-cardiaque-58887120.html"
-    return url
+app = Flask(__name__)
 
-def jumia():
-    url = get_url()
+def jumia(url):
 
     try:
         response = requests.get(url)
@@ -21,9 +19,16 @@ def jumia():
         print(title)
         print(category)
         """save_file"""
-        return { title, category }
+        return { "title": title, "category": category}
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-jumia()
+@app.route('/scraper', methods=['GET'])
+def handle_request():
+    url_param = request.args.get('url', '')
+    # return f'OK - Received URL: {url_param}'
+    return jumia(url_param)
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=9999, debug=True)
