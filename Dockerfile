@@ -19,4 +19,4 @@ RUN echo "Checking installed packages:" && \
 EXPOSE 9999
 
 # Run app.py when the container launches
-CMD ["python", "scraper.py"]
+CMD ["python", "./server/scraper.py"]
