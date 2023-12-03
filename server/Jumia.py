@@ -5,8 +5,7 @@ def get_url():
     url = "https://www.jumia.ma/smart-watch-t500-montre-intelligente-smart-watsh-full-appel-etanche-frequence-cardiaque-58887120.html"
     return url
 
-def jumia():
-    url = get_url()
+def jumia(url):
 
     try:
         response = requests.get(url)
@@ -21,9 +20,9 @@ def jumia():
         print(title)
         print(category)
         """save_file"""
-        return { title, category }
+        return { "errorMessage": "", "title": title, "category": category }
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
+        return { "errorMessage": "Please recheck the url you passed and try again", "title": "", "category": "" }
 
-jumia()

@@ -2,27 +2,29 @@ from flask import Flask, request
 import requests
 from bs4 import BeautifulSoup as Bs
 
+from Jumia import jumia;
+
 app = Flask(__name__)
 
-def jumia(url):
+# def jumia(url):
 
-    try:
-        response = requests.get(url)
-        print(response)
-        if response.status_code != 200:
-            print(f"Error: {response.status_code}")
-        soup = Bs(response.text, 'html.parser')
-        wrapBody = soup.find('div', '-df -j-bet')
-        cat = soup.find('div','brcbs col16 -pts -pbm')
-        category = cat.a.findNext('a').findNext('a').findNext('a').text
-        title = wrapBody.find('h1').text
-        print(title)
-        print(category)
-        """save_file"""
-        return { "title": title, "category": category}
+#     try:
+#         response = requests.get(url)
+#         print(response)
+#         if response.status_code != 200:
+#             print(f"Error: {response.status_code}")
+#         soup = Bs(response.text, 'html.parser')
+#         wrapBody = soup.find('div', '-df -j-bet')
+#         cat = soup.find('div','brcbs col16 -pts -pbm')
+#         category = cat.a.findNext('a').findNext('a').findNext('a').text
+#         title = wrapBody.find('h1').text
+#         print(title)
+#         print(category)
+#         """save_file"""
+#         return { "title": title, "category": category}
 
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+#     except requests.exceptions.RequestException as e:
+#         print(f"An error occurred: {e}")
 
 @app.route('/scraper', methods=['GET'])
 def handle_request():
