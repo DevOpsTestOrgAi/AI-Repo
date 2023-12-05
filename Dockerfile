@@ -16,7 +16,7 @@ RUN echo "Checking installed packages:" && \
     echo "End of installed packages check."
 
 # Make port 9999 available to the world outside this container
-EXPOSE 9999
+EXPOSE 8080
 
 # Run app.py when the container launches
 CMD ["python", "./server/scraper.py"]
