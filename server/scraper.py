@@ -1,7 +1,4 @@
 from flask import Flask, request
-import requests
-from bs4 import BeautifulSoup as Bs
-
 from Jumia import jumia
 from ResultScraper import res
 
@@ -18,4 +15,14 @@ def handleSearcher():
     return res(keyword)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    # Use Gunicorn as the WSGI server
+    from gunicorn import GunicornApplication
+
+    class FlaskApplication(GunicornApplication):
+        def init(self, parser, opts, args):
+            return {
+                'bind': f'0.0.0.0:8080',
+                'workers': 4  # Adjust the number of workers based on your needs
+            }
+
+    FlaskApplication().run()

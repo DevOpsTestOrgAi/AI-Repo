@@ -15,8 +15,5 @@ RUN echo "Checking installed packages:" && \
     pip freeze && \
     echo "End of installed packages check."
 
-# Make port 9999 available to the world outside this container
-EXPOSE 8080
-
-# Run app.py when the container launches
-CMD ["python", "./server/scraper.py"]
+# Use Gunicorn as the WSGI server
+CMD ["gunicorn", "server.scraper:app", "-c", "./server/gunicorn_config.py"]
