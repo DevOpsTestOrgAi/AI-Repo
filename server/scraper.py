@@ -22,7 +22,7 @@ if __name__ == '__main__':
         def init(self, parser, opts, args):
             return {
                 'bind': f'0.0.0.0:8080',
-                'workers': 4  # Adjust the number of workers based on your needs
+                'workers': 1 # Adjust the number of workers based on your needs
             }
 
     FlaskApplication().run()
