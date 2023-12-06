@@ -16,4 +16,5 @@ RUN echo "Checking installed packages:" && \
     echo "End of installed packages check."
 
 # Use Gunicorn as the WSGI server
-CMD ["gunicorn", "server.scraper:app", "-c", "./server/gunicorn_config.py"]
+CMD ["gunicorn", "server.scraper:app", "-c", "./server/gunicorn_config.py", "--pythonpath", "/app"]
+

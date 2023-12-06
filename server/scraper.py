@@ -1,6 +1,6 @@
 from flask import Flask, request
-from Jumia import jumia
-from ResultScraper import res
+from server.Jumia import jumia
+from server.ResultScraper import res
 
 app = Flask(__name__)
 
