@@ -15,7 +15,7 @@ df['Processed_Category'] = df['Category'].apply(lambda x: x.lower())
 # Endpoint for suggestion
 @app.route('/ai/suggest', methods=['GET'])
 def suggest():
-    input_text = request.args.get('category')
+    input_text = request.args.get('input')
 
     if not input_text:
         return jsonify({'error': 'Input text parameter is missing'}), 400
