@@ -62,7 +62,7 @@ pipeline {
 
                     def newImageLine = "image: ${registryName}:${imageTag}"
 
-                    sh "sed -i 's|image: sk09devops/scrapper-api:latest.*|${newImageLine}|' ${manifestsDir}/ai-v1-deployment.yml"
+                    sh "sed -i 's|image: sk09devops/ai-v1:latest.*|${newImageLine}|' ${manifestsDir}/ai-v1-deployment.yml"
 
                     withCredentials([usernamePassword(credentialsId: 'git', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         dir(cloneDir) {
