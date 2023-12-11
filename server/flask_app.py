@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from gensim.models import Word2Vec
 import pandas as pd
+from gunicorn_config import *  # Import Gunicorn configuration
 
 app = Flask(__name__)
 
@@ -40,4 +41,4 @@ def preprocess_text(text):
     return text.lower()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, **{'workers': workers, 'bind': bind})

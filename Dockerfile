@@ -9,4 +9,4 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "flask_app:app"]
+CMD ["gunicorn", "flask_app:app", "-c", "gunicorn_config.py"]
