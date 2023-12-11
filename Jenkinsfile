@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registryName = 'sk09devops/scrapper-api' // Provided Docker Hub repository name
+        registryName = 'sk09devops/ai-v1' // Provided Docker Hub repository name
         registryCredential = 'DOCKERHUB' // Provided credential name
         dockerImage = ''
         imageTag = "latest-${BUILD_NUMBER}" // Default tag with build number
@@ -62,7 +62,7 @@ pipeline {
 
                     def newImageLine = "image: ${registryName}:${imageTag}"
 
-                    sh "sed -i 's|image: sk09devops/scrapper-api:latest.*|${newImageLine}|' ${manifestsDir}/scrapper-deployment.yml"
+                    sh "sed -i 's|image: sk09devops/scrapper-api:latest.*|${newImageLine}|' ${manifestsDir}/ai-v1-deployment.yml"
 
                     withCredentials([usernamePassword(credentialsId: 'git', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         dir(cloneDir) {
