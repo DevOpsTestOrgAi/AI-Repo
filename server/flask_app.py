@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from gensim.models import Word2Vec
 import pandas as pd
 from gunicorn_config import *  # Import Gunicorn configuration
+from urllib.parse import unquote  # Import the unquote function for URL decoding
 
 app = Flask(__name__)
 
@@ -15,27 +16,23 @@ df['Processed_Category'] = df['Category'].apply(lambda x: x.lower())
 # Endpoint for suggestion
 @app.route('/ai/suggest', methods=['GET'])
 def suggest():
-    input_text = request.args.get('input')
+    input_text_encoded = request.args.get('input')
 
-    if not input_text:
+    if not input_text_encoded:
         return jsonify({'error': 'Input text parameter is missing'}), 400
+
+    # Decode the URL-encoded input
+    input_text = unquote(input_text_encoded)
 
     input_text = preprocess_text(input_text)
     
-    # Get the transaction_id for the input text
-    transaction_id = df[df['Processed_Category'] == input_text]['Transaction_Id'].values
-    if len(transaction_id) == 0:
-        return jsonify({'error': 'Input text not found in the dataset'}), 404
-    
-    transaction_id = transaction_id[0]
-
-    # Get similar words based on the transaction_id
+    # Get similar words based on the input text
     similar_words = model.wv.most_similar(input_text, topn=5)
 
-    # Extract words and their similarities
-    suggestions = [{'word': word.split('_')[0], 'similarity': similarity} for word, similarity in similar_words]
+    # Extract words from the similar_words list
+    suggestions = [word.split('_')[0] for word, _ in similar_words]
 
-    return jsonify({'input_text': input_text, 'transaction_id': transaction_id, 'suggestions': suggestions})
+    return jsonify(suggestions)
 
 def preprocess_text(text):
     return text.lower()
