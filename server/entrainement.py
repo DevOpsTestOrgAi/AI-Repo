@@ -1,39 +1,30 @@
+# entrainement.py
+
 import pandas as pd
 from gensim.models import Word2Vec
-from sklearn.model_selection import train_test_split
 
-# Charger les données
-df = pd.read_csv('datajumia.csv', header=None, names=['Category', 'Transaction_Id'])
-
-# Fonction pour prétraiter le texte
+# Function to preprocess text
 def preprocess_text(text):
     return text.lower()
 
-# Appliquer la prétraitement sur les catégories
+# Load the DataFrame with encoding specified
+df = pd.read_csv('datajumia.csv', header=None, names=['Category', 'Transaction_Id'], encoding='utf-8')
+
+# Apply preprocessing to categories
 df['Processed_Category'] = df['Category'].apply(preprocess_text)
 
-
-# Préparer les phrases pour Word2Vec en ajoutant les transaction_ids
+# Prepare sentences for Word2Vec by grouping based on transaction_ids
 sentences = df.groupby('Transaction_Id')['Processed_Category'].apply(list).tolist()
 
-# Entraîner le modèle Word2Vec
-model = Word2Vec(sentences=sentences, vector_size=100, window=10, min_count=1, workers=4, epochs=100)
+# Train the Word2Vec model
+word2vec_model = Word2Vec(sentences=sentences, vector_size=100, window=10, min_count=1, workers=4, epochs=100)
 
-# Enregistrer le modèle
-model.save("word2vec_model.model")
+def get_similar_words(input_text):
+    target_keyword_work = preprocess_text(input_text)
+    target_transaction_id = df[df['Processed_Category'] == target_keyword_work]['Transaction_Id'].values[0]
 
-# Charger le modèle Word2Vec
-model = Word2Vec.load("word2vec_model.model")
+    # Get similar words based on the transaction_id
+    similar_words = word2vec_model.wv.most_similar(f"{target_keyword_work}", topn=5)
 
-# Exemple : Obtenir des mots similaires pour un mot clé donné
-target_keyword = "Biscuit"
-target_keyword_work = preprocess_text(target_keyword)
-target_transaction_id = df[df['Processed_Category'] == target_keyword_work]['Transaction_Id'].values[0]
-
-# Obtenez des mots similaires basés sur la transaction_id
-similar_words = model.wv.most_similar(f"{target_keyword_work}", topn=5)
-
-# Afficher les résultats
-print(f"Words related to '{target_keyword}' with the same transaction_id '{target_transaction_id}':")
-for word, similarity in similar_words:
-    print(f"{word.split('_')[0]}: {similarity}")
+    # Return only the list of similar words without similarity scores
+    return [word.split('_')[0] for word, _ in similar_words]
